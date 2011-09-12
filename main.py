@@ -266,7 +266,7 @@ class CoverageReport(webapp.RequestHandler):
 		
 		#now add the coverage to the list for that build
 		coverage_graph = []
-		for key, data_points in build_dict.items():
+		for data_points in build_dict.items():
 			list_length = len(data_points)
 			if list_length > longest_list_length:
 				longest_list_length = list_length
