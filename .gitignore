@@ -1,3 +1,6 @@
 *.pyc
 *.tmproj
 settings.py
+/Test.py
+/.pydevproject
+/.project

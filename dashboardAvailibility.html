@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="refresh" content="60">
+	<title>dashboard</title>
+	<LINK REL=StyleSheet HREF="/styles/main.css" TYPE="text/css" MEDIA=screen>
+
+</head>
+<body>
+<div id="ajax-status"></div>
+<div id="last-updated">{{last_loaded}}</div>
+<ol class='stats'>
+	{% for system in systems %}
+	<li {{project.coverage_color_state}} {%ifequal forloop.counter 4 %}style="clear:both;"{%endifequal%}>
+		<div class="mod-header">
+			<p><a href="{{system.url}}" target="_blank">{{system.name}}</a></p>
+		</div>
+		<div class="mod-body" >
+			<p class="coverage"><span style='color:{{system.status_color}};'>{{system.version}}</span></p>
+			<p style="clear:both;">{{system.status}}</p>
+		</div>
+		<div class="mod-footer">
+			<p>
+				<span class="view"><a href="{{project.coverage_url}}" target="_blank">Report</a></span>
+			</p>
+		</div>
+	</li>
+	{% endfor %}
+</ol>
+</body>
+</html>

@@ -50,13 +50,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE, DAMMIT.
 """
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
-import urllib2, urllib
+import urllib2
 from BeautifulSoup import BeautifulSoup
 import re, os
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 import datetime
 import settings
+from AvailibilityReport import AvailibilityReport
 
 
 #TODO: should be called BuildLog
@@ -107,7 +108,6 @@ def get_build_types():
 	
 def get_all_build_states():
 	projects = get_build_types()
-	new_projects = []
 	
 	for project in projects:
 		try:
@@ -138,7 +138,7 @@ def get_code_coverage(projects):
 				project.coverage_url = "%s/httpAuth/repository/download/%s/%s:id/coverage.html" % (settings.BASE_TC_URL, project.build_type, project.build_id)		
 				soup = get_url_as_soup(project.coverage_url)
 				if soup:
-					project.coverage = float(soup.findAll("td")[5].contents[0].encode('ascii','ignore').split("(")[0].strip().replace("%", ""))
+					project.coverage = float(soup.findAll("td")[5].contents[0].encode('ascii', 'ignore').split("(")[0].strip().replace("%", ""))
 			
 			#iOS based coverage
 			elif project.build_type in ["bt8", "bt5"]:
@@ -150,7 +150,10 @@ def get_code_coverage(projects):
 
 def get_build_ids_to_track():
 	return settings.TRACKED_BUILD_IDS
-	
+
+def get_systems_to_track():
+	return settings.TRACKED_SYSTEMS
+
 def get_latest_builds():
 	bts = get_build_ids_to_track()
 	builds = []
@@ -164,7 +167,7 @@ def get_latest_builds():
 		else:
 			builds.append(Project(build_type=bt))
 	return builds
-		
+
 class CheckForUpdate(webapp.RequestHandler):
 	def needs_build_updated(self, build_type, build_number):
 		if build_type and build_number:
@@ -209,8 +212,8 @@ class CheckForUpdate(webapp.RequestHandler):
 					average = last.coverage + average
 					count = count + 1.0
 				if count > 0:
-					project.avg_coverage_change = round(average/count, 1)
-					change_in_avg =  project.coverage - project.avg_coverage_change
+					project.avg_coverage_change = round(average / count, 1)
+					change_in_avg = project.coverage - project.avg_coverage_change
 				if change_in_avg < 0:
 					project.change_is = "down"
 				if change_in_avg > 0:
@@ -236,8 +239,6 @@ class CheckForUpdate(webapp.RequestHandler):
 				self.response.out.write("pushed new builds")
 				break	
 
-			
-		
 class CoverageReport(webapp.RequestHandler):
 		
 	def get_siren_embed(self):
@@ -266,7 +267,7 @@ class CoverageReport(webapp.RequestHandler):
 		#now add the coverage to the list for that build
 		coverage_graph = []
 		for key, data_points in build_dict.items():
-			list_length =  len(data_points)
+			list_length = len(data_points)
 			if list_length > longest_list_length:
 				longest_list_length = list_length
 			coverage_graph.append(data_points)
@@ -278,6 +279,7 @@ class CoverageReport(webapp.RequestHandler):
 			
 	def get(self):
 		projects = get_latest_builds()
+
 		for project in projects:
 			
 			append_siren = ""
@@ -299,8 +301,8 @@ class CoverageReport(webapp.RequestHandler):
 					 'last_loaded': datetime.datetime.now().strftime("%b %d %I:%M %p ")
 		         }
 		path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
-		self.response.out.write(template.render(path, template_values))
-
+		self.response.out.write(template.render(path, template_values))			
+		
 class Reloader(webapp.RequestHandler):
 	def get(self):
 		template_values = {}
@@ -314,16 +316,17 @@ class MainHandler(webapp.RequestHandler):
 		self.response.out.write(template.render(path, template_values))
 
 def main():
-    application = webapp.WSGIApplication([
+	application = webapp.WSGIApplication([
 										#('/', MainHandler),
 										('/', CoverageReport),
+										('/a', AvailibilityReport),
 										('/coverage_report', CoverageReport),
 										('/reloader', Reloader),
 										('/api/check_for_update', CheckForUpdate),
 										],
                                          debug=True)
-    util.run_wsgi_app(application)
+	util.run_wsgi_app(application)
 
 
 if __name__ == '__main__':
-    main()
+	main()
