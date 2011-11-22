@@ -1,67 +1,82 @@
-TeamCty Monitor
+Team Monitor
 ===============
 
- Creates a dashboard for our C.I. Server for all prjects and records and displays their coverage over time.
-
-This script is built to run on Google AppEngine, checks against a TeamCity Server install, and expects that each project in team city has code coverage outputted to it’s artifacts folder.
-
-
-
-Contributing
-------------
-
-Want to contribute? Great! Here's how.....
-
-
-### Commands
-
-If nothing complains, congratulations!
-
-
-### Classes
-
-Tests should be added in the same manner as described under the
-`Commands` section.
-
+Shows a dashbord with the
+- availability states and the
+- teamcity results
+for the relevant API systems/hosts.
+ 
 
 Installation
------------
+------------
 
-    [install stuff here]
+1. Local development installation
+---------------------------------
+a) Install Python >= 2.7
+b) Install Latest GAE (Google App Engine) SDK
+c) Install Eclipse with the plugins 
+   - PyDev 
+   + GAE
+	 + Subclipse
+d) Checkout svn://svn.iscout.local/intern/spielwiese/team-api/org/team-monitor
+e) Adapt .pydevproject:
+	 + set your own GOOGLE_APP_ENGINE path
 
+2. Runtime system
+-----------------
+a) Install Python >= 2.7
+b) Install GAE SDK
+c) Checkout svn://svn.iscout.local/intern/spielwiese/team-api/org/team-monitor
+b) user --use_sqlite parameter for better performance
 
+	 
 Usage
 -----
+1. Run locally in development environment
+-----------------------------------------
+a) Eclipse/PyDev Perspective: Run as -> PyDev Google App Run
+   
+   This starts the local webservice 
+   		${GOOGLE_APP_ENGINE}/dev_appserver.py
+   at localhost:8080. 
+   The port can be changed in the run-configuration with the --port option.
 
-    require '....'
+b) Browser: 
+	 http://localhost:8080/
+	 
+2. Runtime system
+------------------
+a) Start the local webservice 
+   		${GOOGLE_APP_ENGINE}/dev_appserver.py
+   at localhost:8080. 
+   The port can be changed in the run-configuration with the --port option.
 
-Or, more realistically:
+b) Browser: 
+	 http://localhost:8080/
 
-    require '......'
+
+Classes
+-------
+1. Application logic
+	 main.py <- configuration: settings.py
+		-> AvailibilityReport.py (Model) + AvailibilityReport.html (View)
+		
+2. Runtime configuration:
+	 - app.yaml
+	 - cron.yaml
+		
+3. Helpers:
+	 - BeautifulSoup.py: XML/HTML parser
+
 
 Testing
 -------
-
-To run the tests:
-
-    $ .....
-
-To add tests see the `Commands` section earlier in this
-README.
+TODO 
 
 
-Contributing
-------------
+Original Source:
+-----------------
+This code is adapted from:
+http://github.com/socialize
 
-1. Fork it.
-2. Create a branch (`git checkout -b my_project`)
-3. Commit your changes (`git commit -am "Added Stuff"`)
-4. Push to the branch (`git push origin my_project`)
-5. Create an [Issue][1] with a link to your branch
-6. Enjoy a refreshing Diet Coke and wait
-
-
-[r2h]: http://github.com/socialize
-[r2hc]: http://github.com/
-[1]: http://github.com/socialize/issues
 

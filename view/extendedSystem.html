@@ -1,0 +1,26 @@
+<li {%if forloop.counter0|divisibleby:"5" %} style="clear:both;"{%endif%}>
+	<div class="mod-header">
+		<p><a href="{{system.url}}" target="_blank">{{system.name}}</a></p>
+	</div>
+	<div class="mod-body" >
+			{% if system.message == "" %}
+				<p class="mod-message"><span>&nbsp;</span></p>
+			{% else %}
+				{% if system.status == "OK" %}
+					<p class="mod-message"><span style='color: green'>{{system.message}}</span></p>
+				{% else %}
+					<p class="mod-message"><span style='color: red'>{{system.message}}</span></p>
+				{% endif %}
+  			{% endif %}
+  			
+  			{% if system.failures == -1 %}
+  				<p style="clear:both;font-size:2.0em;"><span style='color: green'>&nbsp;</span></p>
+  			{% else %}
+				{% if system.failures == 0 %}
+					<p style="clear:both;font-size:2.0em;"><span style='color: green'>{{system.failures}} Errors</span></p>
+				{% else %}
+					<p style="clear:both;font-size:2.0em;"><span style='color: red'>{{system.failures}} Errors</span></p>
+				{% endif %}
+			{% endif %}
+	</div>
+</li>

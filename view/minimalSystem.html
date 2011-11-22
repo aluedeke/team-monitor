@@ -1,0 +1,17 @@
+<li {%if forloop.counter0|divisibleby:"5" %} style="clear: both;"{%endif%}>
+	<div class="mod-add-header">
+		<p>
+			<a href="{{system.url}}" target="_blank">{{system.name}}</a>
+		</p>
+	</div>
+	<div class="mod-add-body">
+		{% if system.message == "" %}
+				<span>&nbsp;</span>
+			{% else %}
+				{% if system.status == "OK" %}
+					<span style='color: green'>{{system.message}}</span>
+				{% else %}
+					<span style='color: red'>{{system.message}}</span>
+				{% endif %}
+  			{% endif %}
+	</div></li>
