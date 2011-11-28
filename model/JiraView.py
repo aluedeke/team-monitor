@@ -1,22 +1,15 @@
-'''
-Created on 25.11.2011
-
-@author: AnLuedeke
-'''
 from model.Systems import ExtendedView
 from google.appengine.api import urlfetch
 from util.BeautifulSoup import BeautifulSoup
 
 class JiraView(ExtendedView):
 
-    #
-
     def __init__(self, name, host, username, password, filterId):
         self.name = name
         self.host = host
         self.username = username
         self.password = password
-        self.failures = ""
+        self.failures = 0
         self.filterId = filterId
 
     def update(self):
