@@ -1,9 +1,3 @@
-'''
-Created on 09.11.2011
-
-@author: AnLuedeke
-'''
-
 class BaseView(object):
 
     def update(self):
@@ -33,7 +27,7 @@ class MinimalView(BaseView):
 
 class ExtendedView(MinimalView):
 
-    failures = 0
+    failures = -1
 
     view = "./view/extendedSystem.html"
 
